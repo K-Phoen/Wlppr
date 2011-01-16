@@ -24,15 +24,16 @@
 
 
 from urllib2 import build_opener, HTTPHandler, URLError
+from optparse import OptionParser
 from xml.dom import minidom
-from sys import stderr
+from sys import stderr, exit
 import gconf, os.path, re
 
 
 RANDOM_WLPPR = 0x01
 LATEST_WLPPR = 0x02
 
-WLPPR_TO_RETRIEVE = LATEST_WLPPR
+WLPPR_TO_RETRIEVE = RANDOM_WLPPR
 WLPPR_FILE = '~/.wlppr.jpg'
 PREFERED_SIZES = ['1600x1200']
 
@@ -280,7 +281,33 @@ def chooseWallpaperBySize(wlppr, sizes):
 
 def main():
     """ Programme principal """
-    
+
+    # Définition des options possibles
+    usage = "Usage: %prog [options]"
+    parser = OptionParser(usage=usage)
+
+    parser.add_option("-v", "--verbose",
+                      action="store_true", dest="verbose", default=True,
+                      help="Affiche des messages sur le déroulement des"\
+                      "opérations [défaut]")
+    parser.add_option("-q", "--quiet",
+                      action="store_false", dest="verbose",
+                      help="Fait taire le programme")
+    parser.add_option("-m", "--mode",
+                      default="random", type="choice", choices = ["random",
+                      "latest"], 
+                      help="Mode de récuparation : random, latest [défault :"\
+                      "%default]")
+
+    # récupération des options
+    (options, args) = parser.parse_args()
+
+    # traitement des options
+    VERBOSE = options.verbose
+    WLPPR_TO_RETRIEVE = RANDOM_WLPPR if options.mode == 'random' else \
+                        LATEST_WLPPR
+
+    # lancement de la récupération du wlppr
     retriever = RandomWlpprRetriever() \
                     if WLPPR_TO_RETRIEVE is RANDOM_WLPPR else \
                 FeedRecentWlpprRetriever()
