@@ -30,14 +30,17 @@ from sys import stderr, exit
 import gconf, os.path, re
 
 
-RANDOM_WLPPR = 0x01
-LATEST_WLPPR = 0x02
+class Config:
+    """ Classe "conteneur" pour le stockage de la configuration """
 
-WLPPR_TO_RETRIEVE = RANDOM_WLPPR
-WLPPR_FILE = '~/.wlppr.jpg'
-PREFERED_SIZES = ['1600x1200']
+    RANDOM_WLPPR = 0x01
+    LATEST_WLPPR = 0x02
 
-VERBOSE = False
+    WLPPR_TO_RETRIEVE = RANDOM_WLPPR
+    WLPPR_FILE = '~/.wlppr.jpg'
+    PREFERED_SIZES = ['1600x1200']
+
+    VERBOSE = False
 
 
 class Wlppr:
@@ -108,7 +111,7 @@ class FeedRecentWlpprRetriever(WlpprRetrieverBase):
         parus sur le site
     """
     
-    NB_ITEMS = 5
+    NB_ITEMS = 3
     FEED_URL = 'http://feeds.feedburner.com/wlppr'
     
 
@@ -242,8 +245,8 @@ def chat(msg, error=False):
         Affiche un message su le mode verbose est activé et sur la
         sortie d'erreur si error vaut true
     """
-    
-    if not VERBOSE:
+
+    if not Config.VERBOSE:
         return
     
     if error:
@@ -251,13 +254,14 @@ def chat(msg, error=False):
     else:
         print msg
 
+
 def setWallpaper(url):
     """
         Rècupère l'image à l'url donnée et définit l'image s'y trouvant
         comme fond d'écran
     """
     
-    path = os.path.abspath(os.path.expanduser(WLPPR_FILE))
+    path = os.path.abspath(os.path.expanduser(Config.WLPPR_FILE))
     
     WlpprRetrieverBase.retrieveWlppr(url, path)
     
@@ -289,7 +293,7 @@ def main():
     parser.add_option("-v", "--verbose",
                       action="store_true", dest="verbose", default=True,
                       help="Affiche des messages sur le déroulement des"\
-                      "opérations [défaut]")
+                           "opérations [défaut]")
     parser.add_option("-q", "--quiet",
                       action="store_false", dest="verbose",
                       help="Fait taire le programme")
@@ -297,19 +301,19 @@ def main():
                       default="random", type="choice", choices = ["random",
                       "latest"], 
                       help="Mode de récuparation : random, latest [défault :"\
-                      "%default]")
+                           "%default]")
 
     # récupération des options
     (options, args) = parser.parse_args()
 
     # traitement des options
-    VERBOSE = options.verbose
-    WLPPR_TO_RETRIEVE = RANDOM_WLPPR if options.mode == 'random' else \
-                        LATEST_WLPPR
+    Config.VERBOSE = options.verbose
+    Config.WLPPR_TO_RETRIEVE = Config.RANDOM_WLPPR if options.mode == 'random' else \
+                               Config.LATEST_WLPPR
 
     # lancement de la récupération du wlppr
     retriever = RandomWlpprRetriever() \
-                    if WLPPR_TO_RETRIEVE is RANDOM_WLPPR else \
+                if Config.WLPPR_TO_RETRIEVE is Config.RANDOM_WLPPR else \
                 FeedRecentWlpprRetriever()
     
     chat('[-] Téléchargement de la liste des fonds d\'écran ...')
@@ -320,7 +324,7 @@ def main():
         if len(retriever.wlpprs) == 0:
             url = None
         else:
-            url = chooseWallpaperBySize(retriever.wlpprs[0], PREFERED_SIZES)
+            url = chooseWallpaperBySize(retriever.wlpprs[0], Config.PREFERED_SIZES)
         
     except URLError ,e:
         chat('[!] Téléchargement impossible : %s' % e, True)
