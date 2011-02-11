@@ -5,7 +5,7 @@
 #
 #       Permet d'utiliser des fond d'écrans du site wlppr.com
 #       
-#       Copyright 2011 Kévin Gomez <geek63@gmail.com>
+#       Copyright 2011 Kévin Gomez <contact@kevingomez.fr>
 #       
 #       This program is free software; you can redistribute it and/or modify
 #       it under the terms of the GNU General Public License as published by
@@ -37,7 +37,9 @@ class Config:
     LATEST_WLPPR = 0x02
 
     WLPPR_TO_RETRIEVE = RANDOM_WLPPR
+    # le wall téléchargé sera enregistré ici
     WLPPR_FILE = '~/.wlppr.jpg'
+    # liste des tailles favorites (par ordre de préférences décroissantes)
     PREFERED_SIZES = ['1600x1200']
 
     VERBOSE = False
@@ -292,16 +294,16 @@ def main():
 
     parser.add_option("-v", "--verbose",
                       action="store_true", dest="verbose", default=True,
-                      help="Affiche des messages sur le déroulement des"\
-                           "opérations [défaut]")
+                      help=u"Affiche des messages sur le deroulement "\
+                           u"des opérations [défaut]")
     parser.add_option("-q", "--quiet",
                       action="store_false", dest="verbose",
-                      help="Fait taire le programme")
+                      help=u"Fait taire le programme")
     parser.add_option("-m", "--mode",
-                      default="random", type="choice", choices = ["random",
-                      "latest"], 
-                      help="Mode de récuparation : random, latest [défault :"\
-                           "%default]")
+                      default="random", type="choice",
+                      choices = ["random", "latest"], 
+                      help=u"Mode de récuparation : random, latest "\
+                           u"[défault : %default]")
 
     # récupération des options
     (options, args) = parser.parse_args()
