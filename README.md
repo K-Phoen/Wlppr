@@ -1,9 +1,10 @@
 Wlppr
 =====
 
-Petit script Python permettant d'utiliser le site Wlppr.com comme source
-de fonds d'écran. Deux modes sont disponibles : le mode "dernier publié"
-et le mode aléatoire.
+Petit script Python permettant d'utiliser les sites Wlppr.com et
+Wallbase.cc comme sources de fonds d'écran. Plusieurs modes sont 
+disponibles selon la source : le mode "dernier publié" et le mode 
+aléatoire.
 
 Il est aussi possible de spécifier ses préférences en matière de tailles
 de fond d'écran, le script choisira alors le fond d'écran le plus adapté.
