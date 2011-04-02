@@ -69,29 +69,38 @@ def main():
     # lancement de la récupération du wlppr
     retriever = getRetriever(options.site, options.mode)
     
-    chat('[-] Téléchargement de la liste des fonds d\'écran ...')
+    i = 0
     
-    try:
-        retriever.retrieve()
+    while i < Config.MAX_TRIES:
+        chat('[-] Essai n°%d' % (i+1))
         
-        if len(retriever.wlpprs) == 0:
-            url = None
-        else:
-            url = chooseWallpaperBySize(retriever.wlpprs[0], Config.PREFERED_SIZES)
-    except URLError ,e:
-        chat('[!] Téléchargement impossible : %s' % e, True)
-    
-    chat('[-] Fonds d\'écran trouvés')
-    
-    if url is None:
-        chat('[!] Aucun fond d\'écran correspondant aux contraintes de taille trouvé', True)
-        exit(1)
-    
-    chat('[-] Changement du fond d\'écran ...')
-    
-    setWallpaper(url)
-    
-    chat('[+] Fond d\'écran mis en place !')
+        i += 1
+        
+        chat('[-] Téléchargement de la liste des fonds d\'écran ...')
+        
+        try:
+            retriever.retrieve()
+            
+            if len(retriever.wlpprs) == 0:
+                url = None
+            else:
+                url = chooseWallpaperBySize(retriever.wlpprs[0], Config.PREFERED_SIZES)
+        except URLError ,e:
+            chat('[!] Téléchargement impossible : %s' % e, True)
+        
+        chat('[-] Fonds d\'écran trouvés')
+        
+        if url is None:
+            chat('[!] Aucun fond d\'écran correspondant aux contraintes de taille trouvé', True)
+            continue
+        
+        chat('[-] Changement du fond d\'écran ...')
+        
+        setWallpaper(url)
+        
+        chat('[+] Fond d\'écran mis en place !')
+        
+        break
 
 
 if __name__ == '__main__':
