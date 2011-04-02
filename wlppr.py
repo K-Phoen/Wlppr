@@ -32,7 +32,7 @@ import re
 from config import Config
 from retrievers.retriever_base import Wlppr, RetrieverBase
 from retrievers.wlppr import RandomWlpprRetriever, RecentWlpprRetriever
-from utils import chat, setWallpaper, chooseWallpaperBySize
+from utils import chat, setWallpaper, chooseWallpaperBySize, getRetriever
 
 
 def main():
@@ -49,10 +49,15 @@ def main():
     parser.add_option("-q", "--quiet",
                       action="store_false", dest="verbose",
                       help=u"Fait taire le programme")
+    parser.add_option("-s", "--site",
+                      default="wlppr", type="choice",
+                      choices = ["wlppr", "wallbase"], 
+                      help=u"Site d'origine : wlppr (Wlppr.com), wallbase (wallbase.cc) "\
+                           u"[défault : %default]")
     parser.add_option("-m", "--mode",
                       default="random", type="choice",
-                      choices = ["random", "latest"], 
-                      help=u"Mode de récuparation : random, latest "\
+                      choices = ["random", "latest", "top"], 
+                      help=u"Mode de récuparation : random, latest, top "\
                            u"[défault : %default]")
 
     # récupération des options
@@ -60,13 +65,9 @@ def main():
 
     # traitement des options
     Config.VERBOSE = options.verbose
-    Config.WLPPR_TO_RETRIEVE = Config.RANDOM_WLPPR if options.mode == 'random' else \
-                               Config.LATEST_WLPPR
 
     # lancement de la récupération du wlppr
-    retriever = RandomWlpprRetriever() \
-                if Config.WLPPR_TO_RETRIEVE is Config.RANDOM_WLPPR else \
-                RecentWlpprRetriever()
+    retriever = getRetriever(options.site, options.mode)
     
     chat('[-] Téléchargement de la liste des fonds d\'écran ...')
     

@@ -23,14 +23,23 @@
 #       MA 02110-1301, USA.
 
 
+from retrievers import wlppr
+
+
 class Config:
     """ Classe "conteneur" pour le stockage de la configuration """
 
-    RANDOM_WLPPR    = 0x01
-    LATEST_WLPPR    = 0x02
+    SITES = {
+        'wlppr': {
+            'random': wlppr.RandomWlpprRetriever,
+            'latest': wlppr.RecentWlpprRetriever,
+        },
+        #~ 'wallbase': {
+            #~ 'random': 0x04,
+            #~ 'top': 0x08,
+        #~ },
+    }
     
-
-    WLPPR_TO_RETRIEVE = RANDOM_WLPPR
     # le wall téléchargé sera enregistré ici
     WLPPR_FILE = '~/.wlppr.jpg'
     # liste des tailles favorites (par ordre de préférences décroissantes)

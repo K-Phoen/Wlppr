@@ -71,3 +71,18 @@ def chooseWallpaperBySize(wlppr, sizes):
             return wlppr.links[size]
     
     return None
+
+def getRetriever(site, mode):
+    """
+        Retourne l'instance du retriever à utiliser en fonction du choix
+        de l'utilisateur (site d'origine et mode voulu)
+    """
+    
+    if not Config.SITES.has_key(site):
+        raise NameError("Site inconnu : %s" % site)
+    
+    if not Config.SITES[site].has_key(mode):
+        raise NameError("Mode non disponible pour le site %s. Liste des modes supportés : %s"
+                        % (site, ', '.join(Config.SITES[site].keys())))
+    
+    return Config.SITES[site][mode]()
