@@ -159,6 +159,3 @@ class RandomWlpprRetriever(RetrieverBase):
             links[size] = '%s%s' % (self.WLPPR_BASE_URL, url_part)
         
         return links
-    
-    def getText(self, element):
-        return element.childNodes[0].nodeValue

@@ -23,7 +23,7 @@
 #       MA 02110-1301, USA.
 
 
-from retrievers import wlppr
+from retrievers import wlppr, wallbase
 
 
 class Config:
@@ -34,15 +34,15 @@ class Config:
             'random': wlppr.RandomWlpprRetriever,
             'latest': wlppr.RecentWlpprRetriever,
         },
-        #~ 'wallbase': {
-            #~ 'random': 0x04,
-            #~ 'top': 0x08,
-        #~ },
+        'wallbase': {
+            'random': wallbase.RandomWallbaseRetriever,
+            #'top': wallbase.TopWallbaseRetriever,
+        },
     }
     
     # le wall téléchargé sera enregistré ici
     WLPPR_FILE = '~/.wlppr.jpg'
     # liste des tailles favorites (par ordre de préférences décroissantes)
-    PREFERED_SIZES = ['1600x1200']
+    PREFERED_SIZES = ['1600x1200', '1680x1050', '1366x768', '1280x1024']
 
     VERBOSE = False

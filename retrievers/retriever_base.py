@@ -34,7 +34,9 @@ class Wlppr:
         self.links = links
     
     def __repr__(self):
-        return '#%d : %s (%d)' % (self.no, self.name, len(self.links))
+        return '#%d : %s (%d link : %s)' % (self.no, self.name,
+                                            len(self.links),
+                                            ', '.join(self.links.keys()))
 
 
 class RetrieverBase:
