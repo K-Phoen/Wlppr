@@ -26,8 +26,6 @@
 
 from urllib2 import URLError
 from optparse import OptionParser
-from sys import exit
-import re
 
 from config import Config
 from retrievers.retriever_base import Wlppr, RetrieverBase
@@ -43,12 +41,16 @@ def main():
     parser = OptionParser(usage=usage)
 
     parser.add_option("-v", "--verbose",
-                      action="store_true", dest="verbose", default=True,
+                      action="store_true", dest="verbose", default=Config.VERBOSE,
                       help=u"Affiche des messages sur le deroulement "\
-                           u"des opérations [défaut]")
-    parser.add_option("-q", "--quiet",
+                           u"des opérations")
+    parser.add_option("-q", "--quiet", default=Config.VERBOSE,
                       action="store_false", dest="verbose",
                       help=u"Fait taire le programme")
+    parser.add_option("-t", "--tries", default=Config.MAX_TRIES,
+                      type="int", dest="nb_tries",
+                      help=u"nombre maximum d'essais pour la recherche du wall "\
+                           u"[défault : %default]")
     parser.add_option("-s", "--site",
                       default="wlppr", type="choice",
                       choices = ["wlppr", "wallbase"], 
@@ -65,12 +67,12 @@ def main():
 
     # traitement des options
     Config.VERBOSE = options.verbose
+    Config.MAX_TRIES = options.nb_tries
 
     # lancement de la récupération du wlppr
     retriever = getRetriever(options.site, options.mode)
     
     i = 0
-    
     while i < Config.MAX_TRIES:
         chat('[-] Essai n°%d' % (i+1))
         

@@ -29,6 +29,7 @@ from retrievers import wlppr, wallbase
 class Config:
     """ Classe "conteneur" pour le stockage de la configuration """
 
+    # sources et modes disponibles
     SITES = {
         'wlppr': {
             'random': wlppr.RandomWlpprRetriever,
@@ -36,7 +37,6 @@ class Config:
         },
         'wallbase': {
             'random': wallbase.RandomWallbaseRetriever,
-            #'top': wallbase.TopWallbaseRetriever,
         },
     }
     
@@ -45,6 +45,8 @@ class Config:
     # liste des tailles favorites (par ordre de préférences décroissantes)
     PREFERED_SIZES = ['1600x1200', '1680x1050', '1366x768', '1280x1024']
 
+    # nombre maximum d'essais pour la recherche du wall
     MAX_TRIES = 3
 
-    VERBOSE = False
+    # état d'activation du mode verbeux
+    VERBOSE = True
