@@ -24,13 +24,14 @@
 #       MA 02110-1301, USA.
 
 
+import os.path
 from urllib2 import URLError
 from optparse import OptionParser
 
 from config import Config
 from retrievers.retriever_base import Wlppr, RetrieverBase
 from retrievers.wlppr import RandomWlpprRetriever, RecentWlpprRetriever
-from utils import chat, setWallpaper, chooseWallpaperBySize, getRetriever
+from utils import chat, setWallpaper, getRetriever
 
 
 def main():
@@ -83,22 +84,32 @@ def main():
         try:
             retriever.retrieve()
             
+            chat('[-] Fonds d\'écran trouvés')
+            
             if len(retriever.wlpprs) == 0:
-                url = None
-            else:
-                url = chooseWallpaperBySize(retriever.wlpprs[0], Config.PREFERED_SIZES)
+                chat('[!] Aucun fond d\'écran correspondant aux contraintes de taille trouvé', True)
+                continue
+            
+            # wall choisi
+            wlppr = retriever.wlpprs[0]
+            
+            # on détermine le nom et l'adresse du fichier local
+            filename = wlppr.getFilename(Config.WLPPR_FILE)
+            wlppr_path = os.path.abspath(os.path.expanduser(filename))
+            
+            # récupération de l'URL en tenant compte des contraintes de
+            # taille
+            url = wlppr.getURLForSize(Config.PREFERED_SIZES)
+            
+            # téléchargement du wall
+            RetrieverBase.retrieveWlppr(url, wlppr_path)
         except URLError ,e:
             chat('[!] Téléchargement impossible : %s' % e, True)
-        
-        chat('[-] Fonds d\'écran trouvés')
-        
-        if url is None:
-            chat('[!] Aucun fond d\'écran correspondant aux contraintes de taille trouvé', True)
             continue
         
         chat('[-] Changement du fond d\'écran ...')
         
-        setWallpaper(url)
+        setWallpaper(wlppr_path)
         
         chat('[+] Fond d\'écran mis en place !')
         

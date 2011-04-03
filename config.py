@@ -41,7 +41,8 @@ class Config:
     }
     
     # le wall téléchargé sera enregistré ici
-    WLPPR_FILE = '~/.wlppr.jpg'
+    # %N dans le nom du fichier sera remplacé par le titre du wall
+    WLPPR_FILE = '~/wlppr_%N.jpg'
     # liste des tailles favorites (par ordre de préférences décroissantes)
     PREFERED_SIZES = ['1600x1200', '1680x1050', '1366x768', '1280x1024']
 

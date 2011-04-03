@@ -33,6 +33,27 @@ class Wlppr:
         self.name = name
         self.links = links
     
+    def getURLForSize(self, sizes):
+        """
+            Parcoure la liste des tailles disponibles pour le fond d'écran
+            et retourne la version la plus proche des préférences de tailles
+            définies dans la variable sizes
+        """
+        
+        for size in sizes:
+            if size in self.links.keys():
+                return self.links[size]
+        
+        return None
+    
+    def getFilename(self, pattern):
+        """
+            Retourne le nom du fichier correspondant au wall, en 
+            respectant le pattern donné
+        """
+        
+        return pattern.replace('%N', self.name)
+    
     def __repr__(self):
         return '#%d : %s (%d link : %s)' % (self.no, self.name,
                                             len(self.links),
@@ -51,7 +72,7 @@ class RetrieverBase:
     def retrieve(self):
         """ Méthode à surcharger ! """
         
-        return []
+        pass
     
     @staticmethod
     def urlGetContents(url):

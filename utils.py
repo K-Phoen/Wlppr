@@ -24,7 +24,7 @@
 
 
 from sys import stderr
-import gconf, os.path
+import gconf
 
 from config import Config
 from retrievers.retriever_base import RetrieverBase
@@ -45,32 +45,14 @@ def chat(msg, error=False):
         print msg
 
 
-def setWallpaper(url):
+def setWallpaper(path):
     """
-        Rècupère l'image à l'url donnée et définit l'image s'y trouvant
-        comme fond d'écran
+        Utilise l'image à l'adresse donnée pour changer le fond d'écran
     """
-    
-    path = os.path.abspath(os.path.expanduser(Config.WLPPR_FILE))
-    
-    RetrieverBase.retrieveWlppr(url, path)
     
     client = gconf.client_get_default()
     client.set_string('/desktop/gnome/background/picture_filename',
                       path)
-
-def chooseWallpaperBySize(wlppr, sizes):
-    """
-        Parcoure la liste des tailles disponibles pour le fond d'écran
-        et retourne la version la plus proche des préférences de tailles
-        définies dans la variable sizes
-    """
-    
-    for size in sizes:
-        if size in wlppr.links.keys():
-            return wlppr.links[size]
-    
-    return None
 
 def getRetriever(site, mode):
     """
