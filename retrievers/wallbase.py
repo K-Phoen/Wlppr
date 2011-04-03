@@ -47,6 +47,8 @@ class RandomWallbaseRetriever(RetrieverBase):
             Récupère un fond d'écran aléatoire
         """
         
+        self._reInit()
+        
         page_content = RetrieverBase.urlGetContents(self.WALLBASE_URL)
         
         # récupération de l'url de la page du wall

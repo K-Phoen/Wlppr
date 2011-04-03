@@ -51,8 +51,8 @@ def main():
                       help=u"nombre maximum d'essais pour la recherche du wall "\
                            u"[défault : %default]")
     parser.add_option("-s", "--site",
-                      default="wlppr", type="choice",
-                      choices = ["wlppr", "wallbase"], 
+                      default=Config.DEFAULT_SOURCE, type="choice",
+                      choices = ["wlppr", "wallbase", "fs"], 
                       help=u"Site d'origine : wlppr (Wlppr.com), wallbase (wallbase.cc) "\
                            u"[défault : %default]")
     parser.add_option("-m", "--mode",
@@ -90,19 +90,24 @@ def main():
             # wall choisi
             wlppr = retriever.wlpprs[0]
             
-            # on détermine le nom et l'adresse du fichier local
-            wlppr_path = wlppr.getFullPath(Config.WLPPR_FILE)
-            
             # récupération de l'URL en tenant compte des contraintes de
             # taille
             url = wlppr.getURLForSize(Config.PREFERED_SIZES)
             
-            # téléchargement du wall
-            RetrieverBase.retrieveWlppr(url, wlppr_path)
+            # wall local
+            if not url.startswith('http://'):
+                wlppr_path = wlppr.links[wlppr.links.keys()[0]]
+            # wall distant
+            else:
+                # on détermine le nom et l'adresse du fichier local
+                wlppr_path = wlppr.getFullPath(Config.WLPPR_FILE)
+                
+                # téléchargement du wall
+                RetrieverBase.retrieveWlppr(url, wlppr_path)
         except URLError, e:
             chat('[!] Téléchargement impossible : %s' % e, True)
             continue
-        except ValueError:
+        except ValueError, e:
             chat('[!] Aucun fond d\'écran correspondant aux contraintes de taille trouvé', True)
             continue
         

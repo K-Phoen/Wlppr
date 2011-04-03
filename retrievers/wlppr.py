@@ -44,6 +44,8 @@ class RecentWlpprRetriever(RetrieverBase):
             du site.
         """
         
+        self._reInit()
+        
         nb_left = self.NB_ITEMS
         feed_content = RetrieverBase.urlGetContents(self.FEED_URL)
         
@@ -129,6 +131,8 @@ class RandomWlpprRetriever(RetrieverBase):
         """
             Récupère un fond d'écran aléatoire
         """
+        
+        self._reInit()
         
         page_content = RetrieverBase.urlGetContents(self.WLPPR_URL)
         

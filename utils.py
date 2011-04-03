@@ -67,4 +67,7 @@ def getRetriever(site, mode):
         raise NameError("Mode non disponible pour le site %s. Liste des modes supportés : %s"
                         % (site, ', '.join(Config.SITES[site].keys())))
     
+    if site == 'fs':
+        return Config.SITES[site][mode](Config.WALLPAPERS_DIR)
+    
     return Config.SITES[site][mode]()

@@ -70,19 +70,22 @@ class Wlppr:
                                             ', '.join(self.links.keys()))
 
 
-class RetrieverBase:
+class RetrieverBase(object):
     """ Classe de base apportant des "outils" à tous les retrievers """
     
     USER_AGENT = 'WLPPR-FETCHER/0.2'
     
     
     def __init__(self):
-        self.wlpprs = []
+        self._reInit()
     
     def retrieve(self):
         """ Méthode à surcharger ! """
         
         pass
+    
+    def _reInit(self):
+        self.wlpprs = []
     
     @staticmethod
     def urlGetContents(url):
