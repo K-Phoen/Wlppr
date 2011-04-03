@@ -22,6 +22,8 @@
 #       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #       MA 02110-1301, USA.
 
+
+import os.path
 from urllib2 import build_opener, HTTPHandler
 
 
@@ -44,7 +46,7 @@ class Wlppr:
             if size in self.links.keys():
                 return self.links[size]
         
-        return None
+        raise ValueError("Contraintes de taille non satisfaites")
     
     def getFilename(self, pattern):
         """
@@ -53,6 +55,14 @@ class Wlppr:
         """
         
         return pattern.replace('%N', self.name)
+    
+    def getFullPath(self, pattern):
+        """
+            Retourne l'adresse complète du fichier correspondant au wall,
+            en  respectant le pattern donné.
+        """
+        
+        return os.path.abspath(os.path.expanduser(self.getFilename(pattern)))
     
     def __repr__(self):
         return '#%d : %s (%d link : %s)' % (self.no, self.name,

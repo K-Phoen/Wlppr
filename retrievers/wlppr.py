@@ -34,7 +34,7 @@ class RecentWlpprRetriever(RetrieverBase):
         parus sur le site Wlppr.com
     """
     
-    NB_ITEMS = 3
+    NB_ITEMS = 1
     FEED_URL = 'http://feeds.feedburner.com/wlppr'
     
 

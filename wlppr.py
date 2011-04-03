@@ -23,8 +23,6 @@
 #       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #       MA 02110-1301, USA.
 
-
-import os.path
 from urllib2 import URLError
 from optparse import OptionParser
 
@@ -79,23 +77,21 @@ def main():
         
         i += 1
         
-        chat('[-] Téléchargement de la liste des fonds d\'écran ...')
+        chat('[-] Recherche du fond d\'écran ...')
         
         try:
             retriever.retrieve()
             
-            chat('[-] Fonds d\'écran trouvés')
+            chat('[-] Fond d\'écran trouvé')
             
             if len(retriever.wlpprs) == 0:
-                chat('[!] Aucun fond d\'écran correspondant aux contraintes de taille trouvé', True)
-                continue
+                raise ValueError
             
             # wall choisi
             wlppr = retriever.wlpprs[0]
             
             # on détermine le nom et l'adresse du fichier local
-            filename = wlppr.getFilename(Config.WLPPR_FILE)
-            wlppr_path = os.path.abspath(os.path.expanduser(filename))
+            wlppr_path = wlppr.getFullPath(Config.WLPPR_FILE)
             
             # récupération de l'URL en tenant compte des contraintes de
             # taille
@@ -103,8 +99,11 @@ def main():
             
             # téléchargement du wall
             RetrieverBase.retrieveWlppr(url, wlppr_path)
-        except URLError ,e:
+        except URLError, e:
             chat('[!] Téléchargement impossible : %s' % e, True)
+            continue
+        except ValueError:
+            chat('[!] Aucun fond d\'écran correspondant aux contraintes de taille trouvé', True)
             continue
         
         chat('[-] Changement du fond d\'écran ...')
